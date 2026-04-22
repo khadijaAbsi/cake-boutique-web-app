@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+
+{% block title %}View Employees{% endblock %}
+
+{% block content %}
+<style>
+    /* الأنماط المخصصة من الكود الذي قدمته */
+    h2 {
+        color: var(--dark-pink); /* تأكد من تعريف var(--dark-pink) في base.html */
+        font-family: 'Playfair Display', serif; /* تأكد من استيراد هذا الخط */
+    }
+    .card-header.bg-primary {
+        background-color: var(--dark-pink) !important;
+        color: var(--light-text-color) !important; /* تأكد من تعريف var(--light-text-color) */
+    }
+    .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-primary:hover {
+        background-color: var(--button-hover-pink); /* تأكد من تعريف var(--button-hover-pink) */
+        border-color: var(--button-hover-pink);
+    }
+    .btn-outline-primary {
+        color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--dark-pink);
+        color: var(--light-text-color);
+    }
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+    /* Specific badge colors to match the theme */
+    .badge.bg-info {
+        background-color: var(--medium-pink) !important; /* Changed info to medium pink for consistency */
+        color: var(--primary-text-color) !important; /* تأكد من تعريف var(--primary-text-color) */
+    }
+    .badge.bg-warning {
+        background-color: var(--soft-pink) !important; /* Changed warning to soft pink for consistency */
+        color: var(--primary-text-color) !important;
+    }
+    .badge.bg-danger {
+        background-color: #dc3545 !important; /* Manager, kept red for clear distinction */
+    }
+    .badge.bg-secondary {
+        background-color: #6c757d !important; /* Employee, kept grey */
+    }
+</style>
+<h2 class="mb-4">Employee List</h2>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        All Employees
+    </div>
+    <div class="card-body">
+        {% if not employees %}
+        <div class="alert alert-warning">
+            No employees found in the database.
+        </div>
+        {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Position</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Hire Date</th>
+                        <th>Type</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for employee in employees %}
+                    <tr>
+                        <!-- تم التعديل هنا: استخدام employee.Emp_id (بحرف E كبير) -->
+                        <td>{{ employee.Emp_id }}</td> 
+                        <td>{{ employee.Emp_name }}</td> 
+                        <td>{{ employee.Pos }}</td> 
+                        <td>{{ employee.email }}</td> 
+                        <td>{{ employee.phone or 'N/A' }}</td> 
+                        
+                        <td>
+                            {% if employee.hire_date %}
+                                {{ employee.hire_date.strftime('%Y-%m-%d') }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td> 
+                        
+                        <td>
+                            <!-- تم التعديل هنا: is_full_time و is_manager موجودان في الجدول الأصلي كـ BOOLEAN -->
+                            <span class="badge bg-{{ 'info' if employee.is_full_time else 'warning' }}">
+                                {{ 'Full-time' if employee.is_full_time else 'Part-time' }}
+                            </span>
+                        </td> 
+                        <td>
+                            <!-- تأكد أن لديك عمود 'is_manager' في جدول الموظفين أو قم بمعالجة الدور بطريقة أخرى -->
+                            <span class="badge bg-{{ 'danger' if employee.is_manager else 'secondary' }}">
+                                {{ 'Manager' if employee.is_manager else 'Employee' }}
+                            </span>
+                        </td> 
+                        <td>
+                            <!-- تم التعديل هنا: emp_id إلى Emp_id -->
+                            <a href="{{ url_for('edit_employee', emp_id=employee.Emp_id) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            <!-- تم التعديل هنا: emp_id إلى Emp_id -->
+                            <a href="{{ url_for('delete_employee', emp_id=employee.Emp_id) }}" 
+                               class="btn btn-sm btn-outline-danger">
+                                <i class="bi bi-trash"></i> Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        
+        <a href="{{ url_for('add_employee') }}" class="btn btn-primary mt-3">
+            <i class="bi bi-plus-circle"></i> Add New Employee
+        </a>
+    </div>
+</div>
+{% endblock %}

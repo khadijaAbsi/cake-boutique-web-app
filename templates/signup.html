@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<style>
+    /* Specific styles for signup.html */
+    .card-title {
+        color: var(--dark-pink); /* Using the pink theme variable */
+        font-family: 'Playfair Display', serif;
+    }
+    .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-primary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+    a {
+        color: var(--dark-pink); /* Link color */
+    }
+    a:hover {
+        color: var(--button-hover-pink);
+    }
+</style>
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow">
+            <div class="card-body">
+                <h3 class="card-title text-center mb-4">Register New Account</h3>
+                <form method="POST" action="{{ url_for('signup') }}">
+                    <div class="mb-3">
+                        <label for="user_type" class="form-label">Register as</label>
+                        <select class="form-select" id="user_type" name="user_type" required>
+                            <option value="" disabled selected>Select user type</option>
+                            <option value="customer">Customer</option>
+                            </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label> {# تم إضافة هذا الحقل #}
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary">Sign Up</button>
+                    </div>
+                </form>
+                <p class="text-center mt-3">
+                    Already have an account? <a href="{{ url_for('login') }}">Login here</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

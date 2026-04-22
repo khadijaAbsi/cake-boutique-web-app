@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Our Cakes{% endblock %}
+
+{% block content %}
+<style>
+    /* General Page Styling */
+    .container {
+        max-width: 1200px;
+    }
+    h2 {
+        color: var(--dark-pink); /* Assuming --dark-pink is defined in base.html or a linked CSS */
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .filter-section {
+        margin-bottom: 30px;
+        padding: 20px;
+        background-color: #f8f9fa;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0,0,0,.05);
+    }
+    .filter-section .form-select {
+        border-color: var(--dark-pink);
+    }
+    .filter-section .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .filter-section .btn-primary:hover {
+        background-color: var(--button-hover-pink); /* Assuming --button-hover-pink is defined */
+        border-color: var(--button-hover-pink);
+    }
+
+    /* Cake Card Styling */
+    .cake-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+    }
+    .cake-card {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0,0,0,.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        background-color: #fff;
+        display: flex;
+        flex-direction: column;
+    }
+    .cake-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 16px rgba(0,0,0,.15);
+    }
+    .cake-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-bottom: 1px solid #eee;
+    }
+    .cake-info {
+        padding: 15px;
+        flex-grow: 1; /* Allows info section to expand */
+        display: flex;
+        flex-direction: column;
+    }
+    .cake-info h5 {
+        font-family: 'Playfair Display', serif;
+        color: var(--dark-pink);
+        margin-bottom: 10px;
+        font-size: 1.4rem;
+        flex-grow: 1; /* Allows title to take available space */
+    }
+    .cake-info p {
+        font-size: 0.95rem;
+        color: #666;
+        margin-bottom: 10px;
+    }
+    .price-add-to-cart {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: auto; /* Pushes price and button to the bottom */
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    .price {
+        font-family: 'Playfair Display', serif;
+        color: #e91e63; /* A vibrant pink */
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+    .add-to-cart-btn {
+        background-color: var(--dark-pink);
+        color: white;
+        border: none;
+        border-radius: 5px;
+        padding: 8px 15px;
+        font-size: 0.9rem;
+        transition: background-color 0.3s ease;
+    }
+    .add-to-cart-btn:hover {
+        background-color: var(--button-hover-pink);
+    }
+
+ 
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .cake-grid {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+    }
+</style>
+
+<div class="container my-5">
+    <h2>Our Delicious Cakes</h2>
+
+    <div class="filter-section mb-4">
+        <form action="{{ url_for('shop') }}" method="GET" class="row g-3 align-items-end">
+            <div class="col-md-4">
+                <label for="categoryFilter" class="form-label">Filter by Category:</label>
+                <select class="form-select" id="categoryFilter" name="category">
+                    <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Cakes</option>
+                    <option value="chocolate" {% if selected_category == 'chocolate' %}selected{% endif %}>Chocolate</option>
+                    <option value="vanilla" {% if selected_category == 'vanilla' %}selected{% endif %}>Vanilla</option>
+                    <option value="fruit" {% if selected_category == 'fruit' %}selected{% endif %}>Fruit</option>
+                    <option value="cheese" {% if selected_category == 'cheese' %}selected{% endif %}>Cheese</option>
+                    <option value="specialty" {% if selected_category == 'specialty' %}selected{% endif %}>Specialty</option>
+                    </select>
+            </div>
+            <div class="col-md-auto">
+                <button type="submit" class="btn btn-primary">Apply Filter</button>
+            </div>
+        </form>
+    </div>
+
+    {% if cakes %}
+        <div class="cake-grid">
+            {% for cake in cakes %}
+            {# تم حذف فئة out-of-stock من هنا #}
+            <div class="cake-card"> 
+                {# تم حذف الطبقة الشفافة لـ "OUT OF STOCK" من هنا #}
+                {# {% if cake.stock == 0 or not cake.available %}
+                    <div class="out-of-stock-overlay">Out of Stock</div>
+                {% endif %} #}
+                <img src="{{ cake.image_url or url_for('static', filename='images/default_cake.jpg') }}" alt="{{ cake.name }}">
+                <div class="cake-info">
+                    <h5>{{ cake.name }}</h5>
+                    <p>{{ cake.description or 'A delicious cake for any occasion.' }}</p>
+                    <div class="price-add-to-cart">
+                        <span class="price">${{ "%.2f"|format(cake.price) }}</span>
+                        
+                        <form action="{{ url_for('add_to_cart', cake_id=cake.cake_id) }}" method="POST" style="display: inline;">
+                            <input type="hidden" name="quantity" value="1"> {# Default to 1 item #}
+                            {# تم حذف خاصية disabled من هنا #}
+                            <button type="submit" 
+                                    class="btn add-to-cart-btn"> 
+                                Add to Cart
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info text-center" role="alert">
+            No cakes found matching your criteria.
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

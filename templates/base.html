@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cake Shop - {% block title %}{% endblock %}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        /* Define Custom CSS Variables */
+        :root {
+            --primary-text-color: #333;
+            --light-text-color: #fff;
+            --soft-pink: #fce4ec; /* Very light pink background */
+            --medium-pink: #ffdee9; /* Light pink for ribbon/accents */
+            --dark-pink: #ff8fab; /* A more vibrant pink for buttons/accents */
+            --button-hover-pink: #e07d9f; /* Slightly darker pink on hover */
+            --header-bg-color: #fff;
+            --footer-bg-color: #ffcdd2; /* Light pink for footer */
+            --primary-color: #e91e63; /* A strong pink for main elements */
+            --secondary-color: #f8bbd0; /* A softer pink for secondary elements */
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--primary-text-color);
+            background-color: var(--soft-pink); /* Overall light pink background */
+        }
+
+        .navbar {
+            background-color: var(--primary-color); /* Dark pink navbar */
+            box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        }
+        .navbar-brand, .navbar-nav .nav-link {
+            color: var(--light-text-color) !important;
+            font-weight: 600;
+        }
+        .navbar-nav .nav-link:hover {
+            color: var(--medium-pink) !important;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            color: var(--primary-color);
+        }
+
+        .card {
+            border-radius: 15px;
+            overflow: hidden;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--dark-pink);
+            border-color: var(--dark-pink);
+        }
+        .btn-primary:hover {
+            background-color: var(--button-hover-pink);
+            border-color: var(--button-hover-pink);
+        }
+
+        .bg-primary { background-color: var(--primary-color) !important; }
+        .bg-secondary { background-color: var(--secondary-color) !important; }
+        .text-primary { color: var(--primary-color) !important; }
+
+        /* Specific styles for shop.html */
+        .product-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            background-color: #fce4ec; /* Very light pink */
+            border-color: #f8bbd0; /* Slightly darker light pink border */
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .product-img {
+            border-top-left-radius: 15px;
+            border-top-right-radius: 15px;
+            height: 200px;
+            object-fit: cover;
+        }
+
+        .description {
+            min-height: 70px; /* Ensure consistent height for description area */
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 3; /* Limit description to 3 lines */
+            -webkit-box-orient: vertical;
+        }
+        .price {
+            font-family: 'Playfair Display', serif;
+            color: #ff8fab; /* Use a vibrant pink for price */
+            font-weight: 700;
+        }
+        .btn-dark-pink {
+            background-color: #ff8fab; /* Dark pink from home.html */
+            border-color: #ff8fab;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-dark-pink:hover {
+            background-color: #e07d9f; /* Hover pink from home.html */
+            border-color: #e07d9f;
+            transform: translateY(-2px);
+        }
+        .add-to-cart-btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Override base.html nav styles for consistency if needed - optional */
+        .navbar {
+            background-color: var(--header-bg-color); /* From home.html */
+            border-bottom: 3px solid var(--medium-pink);
+        }
+
+        .navbar-brand {
+            font-family: 'Great Vibes', cursive;
+            font-size: 2rem;
+            color: var(--dark-pink) !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: var(--primary-text-color) !important;
+            font-weight: 600;
+            margin-right: 15px;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--dark-pink) !important;
+        }
+        
+        .footer {
+            background-color: var(--footer-bg-color);
+            color: var(--primary-text-color);
+            padding: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('dashboard') }}">Cake Shop</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('shop') }}">Shop</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('manage_orders') }}">Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('manage_inventory') }}">Inventory</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('view_employees') }}">Employees</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('my_schedule') }}">Schedule</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('add_cake') }}">
+                            <i class="bi bi-plus-circle"></i> Add New Cake
+                        </a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <span class="navbar-text me-3">
+                            Welcome, {{ session.get('username', 'Guest') }}
+                            <span class="badge bg-{{ 'danger' if session.get('is_manager') else 'secondary' }}">
+                                {{ session.get('position', '') }}
+                            </span>
+                        </span>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">
+                            <i class="bi bi-box-arrow-right"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-4">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }} alert-dismissible fade show">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="bg-light text-center text-lg-start mt-5">
+        <div class="text-center p-3 bg-primary text-white">
+            © {{ datetime.datetime.now().year }} Cake Shop - Employee Management System
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

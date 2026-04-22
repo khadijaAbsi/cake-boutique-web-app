@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+
+{% block title %}Inventory Management{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .card-header.bg-primary {
+        background-color: var(--dark-pink) !important;
+        color: var(--light-text-color) !important;
+    }
+    .card-header.bg-info {
+        background-color: var(--medium-pink) !important; /* Lighter pink for info */
+        color: var(--primary-text-color) !important;
+    }
+    .table-warning {
+        background-color: var(--soft-pink) !important; /* Light pink for warning rows */
+    }
+    .btn-success {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-success:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+    .btn-warning { /* Ship ingredient button */
+        background-color: #ffa726; /* Kept orange as it signifies action, or change to another pink shade */
+        border-color: #ffa726;
+    }
+    .btn-info { /* View shipments button */
+        background-color: #26c6da; /* Kept light blue, or change to another pink shade */
+        border-color: #26c6da;
+    }
+    .input-group .btn-outline-secondary {
+        border-color: var(--medium-pink);
+        color: var(--dark-pink);
+    }
+    .input-group .btn-outline-secondary:hover {
+        background-color: var(--medium-pink);
+        color: var(--light-text-color);
+    }
+</style>
+<h2 class="mb-4">Inventory Management</h2>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                Ingredients
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Ingredient</th>
+                                <th>Stock Level</th>
+                                <th>Unit</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ingredient in ingredients %}\r
+                            <tr class="{{ 'table-warning' if ingredient['stock_level'] < 10 }}">
+                                <td>{{ ingredient['name'] }}</td>
+                                <td>{{ ingredient['stock_level'] }}</td>
+                                <td>{{ ingredient['unit'] }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('update_inventory', ingredient_id=ingredient['ingredient_id']) }}" class="d-inline">
+                                        <div class="input-group input-group-sm">
+                                            <input type="number" name="new_stock" class="form-control" placeholder="Add/Remove" step="1">
+                                            <button type="submit" class="btn btn-outline-secondary">Update</button>
+                                        </div>
+                                    </form>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <a href="{{ url_for('add_ingredient') }}" class="btn btn-success mt-3">➕ Add Ingredient</a>
+                <a href="{{ url_for('ship_ingredient') }}" class="btn btn-warning mt-3">📦 Ship Ingredient</a>
+                <a href="{{ url_for('view_shipments') }}" class="btn btn-info mt-3">🔍 View All Shipments</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header bg-info text-white">
+                Recent Shipments
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for shipment in shipments %}\r
+                    <li class="list-group-item">
+                        <strong>{{ shipment['name'] }}</strong><br>
+                        {{ shipment['shipment_date'] }}<br>
+                        <small class="text-muted">#{{ shipment['shipment_id'] }} — {{ shipment['quantity'] }} units</small>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Confirm Your Order{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--primary-color-navbar);
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+    .confirmation-section {
+        background-color: #fff;
+        padding: 40px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.1);
+    }
+    .confirmation-section h3 {
+        color: var(--primary-color-navbar);
+        margin-bottom: 25px;
+        text-align: center;
+    }
+    .order-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+        padding-bottom: 15px;
+        border-bottom: 1px dashed #eee;
+    }
+    .order-item:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .order-item img {
+        width: 70px;
+        height: 70px;
+        object-fit: cover;
+        margin-right: 15px;
+        border-radius: 5px;
+    }
+    .order-item-details {
+        flex-grow: 1;
+    }
+    .order-item-details h5 {
+        margin-bottom: 3px;
+        color: var(--primary-text-color);
+        font-size: 1.1rem;
+    }
+    .order-summary-final {
+        border-top: 2px solid var(--primary-color-navbar);
+        padding-top: 20px;
+        margin-top: 30px;
+        text-align: end;
+    }
+    .order-summary-final h4 {
+        color: var(--primary-color-navbar);
+        font-size: 1.8rem;
+    }
+    .btn-place-order {
+        background-color: #28a745; /* Green for "Place Order" */
+        border-color: #28a745;
+        color: white;
+        padding: 12px 25px;
+        font-size: 1.2rem;
+        transition: background-color 0.3s ease;
+    }
+    .btn-place-order:hover {
+        background-color: #218838; /* Darker green on hover */
+        border-color: #1e7e34;
+    }
+</style>
+
+<div class="container my-5">
+    <h2>Confirm Your Order</h2>
+
+    <div class="confirmation-section">
+        <h3>Order Details</h3>
+
+        {% if cart_items %}
+            {% for item in cart_items %}
+            <div class="order-item">
+                <img src="{{ item.image_url }}" alt="{{ item.name }}">
+                <div class="order-item-details">
+                    <h5>{{ item.name }}</h5>
+                    <p class="mb-0">Quantity: {{ item.quantity }}</p>
+                    <p class="mb-0">Price: ${{ "%.2f"|format(item.price) }} each</p>
+                    <p class="mb-0 fw-bold">Item Total: ${{ "%.2f"|format(item.total) }}</p>
+                </div>
+            </div>
+            {% endfor %}
+
+            <div class="order-summary-final">
+                <h4>Total Amount: ${{ "%.2f"|format(total_price) }}</h4>
+                <p class="text-muted">Please review your order carefully before placing.</p>
+
+                <form action="{{ url_for('confirm_order') }}" method="POST">
+                    <button type="submit" class="btn btn-place-order mt-3">Place Order</button>
+                    <a href="{{ url_for('view_cart') }}" class="btn btn-outline-secondary mt-3 ms-2">Go Back to Cart</a>
+                </form>
+            </div>
+        {% else %}
+            <div class="alert alert-warning text-center" role="alert">
+                No items to confirm. Your cart is empty.
+                <a href="{{ url_for('shop') }}">Continue shopping</a>.
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

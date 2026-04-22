@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-primary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+</style>
+<h2>Select a Cake to Add Ingredients</h2>
+<form action="{{ url_for('add_ingredients_to_cake') }}" method="post"> {# Corrected URL for the action #}
+    <label for="cake_id">Choose Cake:</label>
+    <select name="cake_id" id="cake_id" class="form-select mb-3">
+        {% for cake in cakes %}
+        <option value="{{ cake.cake_id }}">{{ cake.name }}</option> {# Assuming cake has cake_id and name attributes #}
+        {% endfor %}
+    </select>
+    <button type="submit" class="btn btn-primary">Select</button>
+</form>
+
+{% if cake_selected %}
+<h3 class="mt-4" style="color: var(--dark-pink); font-family: 'Playfair Display', serif;">Add Ingredients to {{ cake_selected.name }}</h3>
+<form method="POST" action="{{ url_for('add_ingredients_to_cake', cake_id=cake_selected.cake_id) }}">
+    <div class="table-responsive">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th>Ingredient</th>
+                    <th>Current Stock</th>
+                    <th>Unit</th>
+                    <th>Quantity Needed</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for ing in ingredients %}
+                <tr>
+                    <td>{{ ing.name }}</td>
+                    <td>{{ ing.stock_level }}</td>
+                    <td>{{ ing.unit }}</td>
+                    <td>
+                        <input type="number" name="quantity_{{ ing.ingredient_id }}" 
+                               class="form-control form-control-sm" 
+                               value="{{ ing.current_cake_quantity if ing.current_cake_quantity else '' }}" 
+                               step="0.01" min="0">
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button type="submit" class="btn btn-success mt-3">Update Ingredients for Cake</button>
+</form>
+{% endif %}
+{% endblock %}

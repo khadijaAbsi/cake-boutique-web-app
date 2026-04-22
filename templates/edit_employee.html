@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Edit Employee{% endblock %}
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-primary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+    .btn-secondary {
+        background-color: var(--medium-pink); /* Adjust secondary button to pink theme */
+        border-color: var(--medium-pink);
+        color: var(--primary-text-color);
+    }
+    .btn-secondary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+        color: var(--light-text-color);
+    }
+</style>
+<h2>Edit Employee</h2>
+<form method="POST">
+    <div class="mb-3">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ employee.Emp_name }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Position</label>
+        <input type="text" name="position" value="{{ employee.Pos }}" class="form-control" required>
+    </div>
+    <div class="mb-3">
+        <label>Phone</label>
+        <input type="text" name="phone" value="{{ employee.phone }}" class="form-control">
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="is_full_time" {% if employee.is_full_time %}checked{% endif %}>
+        <label class="form-check-label">Full Time</label>
+    </div>
+    <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="is_manager" {% if employee.is_manager %}checked{% endif %}>
+        <label class="form-check-label">Manager</label>
+    </div>
+    <button type="submit" class="btn btn-primary mt-3">Update</button>
+    <a href="{{ url_for('view_employees') }}" class="btn btn-secondary mt-3">Cancel</a>
+</form>
+{% endblock %}

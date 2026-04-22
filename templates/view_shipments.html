@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Shipments Log{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .card-header.bg-info {
+        background-color: var(--dark-pink) !important;
+        color: var(--light-text-color) !important;
+    }
+</style>
+<h2 class="mb-4">Shipments Log</h2>
+
+<div class="card">
+    <div class="card-header bg-info text-white">Recent Shipments</div>
+    <div class="card-body">
+        {% if shipments %}
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Shipment ID</th>
+                    <th>Ingredient</th>
+                    <th>Supplier</th>
+                    <th>Quantity</th>
+                    <th>Date</th>
+                    <th>Received By</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in shipments %}\r
+                <tr>
+                    <td>{{ s.shipment_id }}</td>
+                    <td>{{ s.ingredient_name }}</td>
+                    <td>{{ s.supplier_name }}</td>
+                    <td>{{ s.quantity }}</td>
+                    <td>{{ s.shipment_date.strftime('%Y-%m-%d') if s.shipment_date else '' }}</td>
+                    <td>{{ s.employee_name if s.employee_name else 'N/A' }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <p>No shipments found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

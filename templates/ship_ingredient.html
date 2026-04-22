@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Ship Ingredient{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .btn-success {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-success:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+    .btn-secondary {
+        background-color: var(--medium-pink);
+        border-color: var(--medium-pink);
+        color: var(--primary-text-color);
+    }
+    .btn-secondary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+        color: var(--light-text-color);
+    }
+</style>
+<div class="container mt-4">
+    <h2 class="mb-4">Add Ingredient Shipment</h2>
+
+    <form method="POST" action="{{ url_for('ship_ingredient') }}">
+        <div class="mb-3">
+            <label for="ingredient_id" class="form-label">Select Ingredient</label>
+            <select class="form-select" name="ingredient_id" id="ingredient_id" required>
+                {% for ingredient in ingredients %}\r
+                <option value="{{ ingredient[0] }}">{{ ingredient[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="supplier_id" class="form-label">Select Supplier</label>
+            <select class="form-select" name="supplier_id" id="supplier_id" required>
+                {% for supplier in suppliers %}\r
+                <option value="{{ supplier[0] }}">{{ supplier[1] }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" name="quantity" id="quantity" step="0.01" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="shipment_date" class="form-label">Shipment Date</label>
+            <input type="date" class="form-control" name="shipment_date" id="shipment_date" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Add Shipment</button>
+        <a href="{{ url_for('manage_inventory') }}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

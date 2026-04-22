@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}My Schedule{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .card-header.bg-primary {
+        background-color: var(--dark-pink) !important;
+        color: var(--light-text-color) !important;
+    }
+    .card-header.bg-info {
+        background-color: var(--medium-pink) !important;
+        color: var(--primary-text-color) !important;
+    }
+</style>
+<h2 class="mb-4">My Schedule</h2>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        Employee Information
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <h5>{{ schedule[0] }}</h5>
+                <p class="text-muted">{{ "Full-time" if schedule[2] else "Part-time" }} Employee</p>
+            </div>
+            <div class="col-md-6">
+                <h5>Current Schedule</h5>
+                <p>{{ schedule[1] }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mt-4">
+    <div class="card-header bg-info text-white">
+        Schedule Notes
+    </div>
+    <div class="card-body">
+        <ul>
+            <li>Please arrive 15 minutes before your shift starts</li>
+            <li>Contact your manager for any schedule changes</li>
+            <li>Weekend shifts may require overtime</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

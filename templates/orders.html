@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Order Management{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .btn-outline-primary {
+        color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--dark-pink);
+        color: var(--light-text-color);
+    }
+    
+    .btn-outline-warning { border-color: #ffc107; color: #ffc107; }
+    .btn-outline-warning:hover { background-color: #ffc107; color: white; }
+    .btn-outline-info { border-color: #17a2b8; color: #17a2b8; }
+    .btn-outline-info:hover { background-color: #17a2b8; color: white; }
+    .btn-outline-success { border-color: #28a745; color: #28a745; }
+    .btn-outline-success:hover { background-color: #28a745; color: white; }
+    .btn-outline-danger { border-color: #dc3545; color: #dc3545; }
+    .btn-outline-danger:hover { background-color: #dc3545; color: white; }
+
+    .badge.bg-success { background-color: #28a745 !important; }
+    .badge.bg-danger { background-color: #dc3545 !important; }
+    .badge.bg-info { background-color: #17a2b8 !important; }
+    .badge.bg-warning { background-color: #ffc107 !important; }
+
+    .card-header {
+        background-color: var(--medium-pink) !important;
+        color: var(--primary-text-color) !important;
+    }
+    .form-select-sm {
+        border-color: var(--border-color);
+    }
+</style>
+<h2 class="mb-4">Order Management</h2>
+
+<div class="mb-4">
+    <div class="btn-group" role="group">
+        <a href="{{ url_for('manage_orders', status='all') }}" class="btn btn-outline-primary">All Orders</a>
+        <a href="{{ url_for('manage_orders', status='pending') }}" class="btn btn-outline-warning">Pending</a>
+        <a href="{{ url_for('manage_orders', status='processing') }}" class="btn btn-outline-info">Processing</a>
+        <a href="{{ url_for('manage_orders', status='completed') }}" class="btn btn-outline-success">Completed</a>
+        <a href="{{ url_for('manage_orders', status='cancelled') }}" class="btn btn-outline-danger">Cancelled</a>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in orders %}\r
+                    <tr>
+                        <td>{{ order[0] }}</td>
+                        <td>{{ order[1] }}</td>
+                        <td>{{ order[2].strftime('%Y-%m-%d %H:%M') }}</td>
+                        <td>
+                            <span class="badge bg-{{ 
+                                'success' if order[3] == 'completed' 
+                                else 'danger' if order[3] == 'cancelled' 
+                                else 'info' if order[3] == 'processing' 
+                                else 'warning' 
+                            }}">
+                                {{ order[3] }}
+                            </span>
+                        </td>
+                        <td>${{ "%.2f"|format(order[4]) }}</td>
+                        <td>
+                            <form method="POST" action="{{ url_for('update_order_status', order_id=order[0]) }}" class="d-inline">
+                                <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                                    <option value="pending" {{ 'selected' if order[3] == 'pending' }}>Pending</option>
+                                    <option value="processing" {{ 'selected' if order[3] == 'processing' }}>Processing</option>
+                                    <option value="completed" {{ 'selected' if order[3] == 'completed' }}>Completed</option>
+                                    <option value="cancelled" {{ 'selected' if order[3] == 'cancelled' }}>Cancelled</option>
+                                </select>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

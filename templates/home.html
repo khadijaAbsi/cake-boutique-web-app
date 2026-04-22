@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>The Cake Boutique - Home</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Open+Sans:wght@400;600&family=Great+Vibes&display=swap" rel="stylesheet">
+
+    <style>
+        /* Define Custom CSS Variables */
+        :root {
+            --primary-text-color: #333;
+            --light-text-color: #fff;
+            --soft-pink: #fce4ec; /* Very light pink background */
+            --medium-pink: #ffdee9; /* Light pink for ribbon/accents */
+            --dark-pink: #ff8fab; /* A more vibrant pink for buttons/accents */
+            --button-hover-pink: #e07d9f; /* Slightly darker pink on hover */
+            --header-bg-color: #fff;
+            --footer-bg-color: #ffcdd2; /* Changed to a soft pink */
+            --footer-text-color: #4a4a4a; /* Darker text for readability on pink */
+            --footer-heading-color: #880e4f; /* Darker pink for footer headings */
+
+
+            --transition-speed: 0.5s; /* Increased transition speed for smoother animations */
+            --bezier-ease: cubic-bezier(0.25, 0.46, 0.45, 0.94); /* Smooth ease for animations */
+
+            /* Fonts */
+            --heading-font: 'Playfair Display', serif;
+            --body-font: 'Open Sans', sans-serif;
+            --cursive-font: 'Great Vibes', cursive; /* For elegant cursive elements */
+        }
+
+        body {
+            font-family: var(--body-font);
+            color: var(--primary-text-color);
+            line-height: 1.6;
+            background-color: var(--soft-pink); /* Light pink background for the entire page */
+            overflow-x: hidden; /* Prevent horizontal scroll issues from animations */
+            scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: var(--header-bg-color);
+            padding: 1rem 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            z-index: 1000; /* Ensure navbar is on top */
+            position: sticky;
+            top: 0;
+            transition: background-color var(--transition-speed) ease;
+        }
+        .navbar-brand {
+            font-family: var(--heading-font);
+            font-size: 2.5rem; /* Larger font for logo */
+            color: var(--primary-text-color) !important;
+            font-weight: 700;
+            transition: color var(--transition-speed) ease;
+        }
+        .navbar-brand:hover {
+            color: var(--dark-pink) !important; /* Changed hover color */
+        }
+        .nav-link {
+            color: var(--primary-text-color) !important;
+            font-weight: 600;
+            margin-left: 1.5rem;
+            position: relative; /* For underline effect */
+            transition: color var(--transition-speed) ease;
+        }
+        .nav-link:hover {
+            color: var(--dark-pink) !important; /* Changed hover color */
+        }
+        .nav-link::after { /* Underline effect on hover */
+            content: '';
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--dark-pink);
+            transition: width 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .navbar-icons .nav-link {
+            font-size: 1.2rem;
+            margin-left: 1rem;
+        }
+
+        /* Hero Section - New Design */
+        .hero-section {
+            position: relative;
+            background-color: var(--soft-pink); /* Uses soft pink for hero background */
+            color: var(--primary-text-color);
+            text-align: center;
+            padding: 120px 20px 100px; /* Adjust padding for shape */
+            min-height: 600px; /* Increased height */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .hero-section .hero-bg-image {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url("{{ url_for('static', filename='images/hero_background.jpeg') }}") center/cover no-repeat;
+            opacity: 0.6; /* Softer background image */
+            z-index: -2;
+        }
+
+        .hero-section::before { /* Overlay for text readability */
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 255, 255, 0.3); /* Slightly brighter overlay */
+            z-index: -1;
+        }
+
+        /* Decorative Shapes/Lines */
+        .hero-section .decorative-shape-1 { /* Bottom curve for Hero section */
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 150px; /* Height of the curved part */
+            background-color: var(--soft-pink); /* Matches page background */
+            clip-path: ellipse(100% 60% at 50% 100%);
+            transform: translateY(50%); /* Move it down to show only the top curve */
+            z-index: 0;
+        }
+
+        .hero-section .decorative-shape-2 { /* Top right circular shape */
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 350px;
+            height: 350px;
+            background-color: var(--dark-pink); /* Darker pink accent */
+            border-radius: 50%;
+            opacity: 0.1; /* Very subtle */
+            transform: translate(50%, -50%);
+            z-index: 0;
+        }
+
+        /* Ribbon behind text - FULL WIDTH */
+        .hero-section .text-ribbon {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            transform: translateY(-50%) scaleX(0); /* Start scaled down horizontally */
+            background-color: var(--medium-pink); /* Medium pink for the ribbon */
+            padding: 30px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1;
+            opacity: 0;
+            animation: fadeInScaleX 1.2s var(--bezier-ease) 0.8s forwards; /* Animation name changed */
+            text-align: center;
+        }
+        @keyframes fadeInScaleX { /* New animation for the ribbon */
+            from { opacity: 0; transform: translateY(-50%) scaleX(0); }
+            to { opacity: 1; transform: translateY(-50%) scaleX(1); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            color: var(--primary-text-color);
+        }
+        .hero-content h1 {
+            font-family: var(--heading-font);
+            font-size: 4.8rem;
+            margin-bottom: 20px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+            animation: fadeInDown 1s var(--bezier-ease) forwards;
+            opacity: 0;
+        }
+        .hero-content p {
+            font-family: var(--cursive-font);
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
+            animation: fadeInUp 1s var(--bezier-ease) 0.5s forwards;
+            opacity: 0;
+        }
+        .hero-content .btn-primary {
+            background-color: var(--dark-pink); /* Darker pink for button */
+            border-color: var(--dark-pink);
+            padding: 18px 45px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease, box-shadow var(--transition-speed) ease;
+            animation: zoomIn 1s var(--bezier-ease) 1s forwards;
+            opacity: 0;
+        }
+        .hero-content .btn-primary:hover {
+            background-color: var(--button-hover-pink); /* Slightly darker on hover */
+            border-color: var(--button-hover-pink);
+            transform: translateY(-8px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        /* Our Menu Section */
+        .our-menu-section {
+            padding: 80px 0;
+            background-color: #fff; /* White background for menu section */
+            position: relative;
+            z-index: 1;
+        }
+        .our-menu-section h2 {
+            font-family: var(--heading-font);
+            text-align: center;
+            margin-bottom: 60px;
+            font-size: 3.2rem;
+            color: var(--primary-text-color);
+            animation: fadeIn 1s var(--bezier-ease) forwards;
+            opacity: 0;
+        }
+        .menu-item-row {
+            margin-bottom: 80px;
+            align-items: center;
+        }
+        .menu-item-row:last-child {
+            margin-bottom: 0;
+        }
+        .menu-item-row.reverse-order .col-md-6:first-child {
+            order: 2;
+        }
+        .menu-item-row.reverse-order .col-md-6:last-child {
+            order: 1;
+        }
+
+        .menu-item-img {
+            text-align: center;
+            position: relative;
+            padding: 20px;
+        }
+        .menu-item-img img {
+            width: 100%;
+            height: 350px; /* Fixed height for all images */
+            object-fit: cover; /* Crop images to fit while maintaining aspect ratio */
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            transition: transform 0.5s var(--bezier-ease);
+        }
+        .menu-item-img img:hover {
+            transform: scale(1.03);
+        }
+        .menu-item-text {
+            padding: 20px;
+            text-align: center;
+        }
+        .menu-item-text h3 {
+            font-family: var(--heading-font);
+            font-size: 2.5rem;
+            color: var(--dark-pink); /* Using dark pink for headings */
+            margin-bottom: 15px;
+        }
+        .menu-item-text p {
+            font-family: var(--body-font);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--primary-text-color);
+            margin-bottom: 25px;
+        }
+        .menu-item-text .btn {
+            background-color: var(--dark-pink); /* Dark pink for buttons */
+            border-color: var(--dark-pink);
+            color: var(--light-text-color);
+            padding: 10px 30px;
+            font-size: 1rem;
+            border-radius: 5px;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+        .menu-item-text .btn:hover {
+            background-color: var(--button-hover-pink); /* Darker on hover */
+            transform: translateY(-3px);
+        }
+        /* Decorative line for menu items */
+        .menu-item-line {
+            width: 80px;
+            height: 3px;
+            background-color: var(--dark-pink); /* Dark pink line */
+            margin: 20px auto 30px;
+        }
+
+        /* Animation for menu items - initially hidden */
+        .menu-item-row.hidden .menu-item-img,
+        .menu-item-row.hidden .menu-item-text h3,
+        .menu-item-row.hidden .menu-item-text .menu-item-line,
+        .menu-item-row.hidden .menu-item-text p,
+        .menu-item-row.hidden .menu-item-text .btn {
+            opacity: 0;
+            /* Changed transform for a smoother slide-up/fade effect */
+            transform: translateY(30px) scale(0.95);
+        }
+        /* When visible, animate in */
+        .menu-item-row.visible .menu-item-img,
+        .menu-item-row.visible .menu-item-text h3,
+        .menu-item-row.visible .menu-item-text .menu-item-line,
+        .menu-item-row.visible .menu-item-text p,
+        .menu-item-row.visible .menu-item-text .btn {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            transition: opacity 1s var(--bezier-ease), transform 1s var(--bezier-ease); /* Smoother transition */
+        }
+        /* Add slight delays for sequential animation within a row */
+        .menu-item-row.visible .menu-item-img { transition-delay: 0.1s; }
+        .menu-item-row.visible .menu-item-text h3 { transition-delay: 0.3s; }
+        .menu-item-row.visible .menu-item-text .menu-item-line { transition-delay: 0.5s; }
+        .menu-item-row.visible .menu-item-text p { transition-delay: 0.7s; }
+        .menu-item-row.visible .menu-item-text .btn { transition-delay: 0.9s; }
+
+
+        /* Order Now Section */
+        .order-now-section {
+            background: url("{{ url_for('static', filename='images/order_now_background.jpeg') }}") center/cover no-repeat;
+            color: var(--light-text-color);
+            text-align: center;
+            padding: 100px 20px;
+            margin-top: 80px;
+            position: relative;
+            z-index: 1;
+        }
+        .order-now-section::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: -1;
+        }
+        .order-now-section h2 {
+            color: var(--light-text-color);
+            font-family: var(--heading-font);
+            margin-bottom: 25px;
+            animation: fadeIn 1s var(--bezier-ease) forwards;
+            opacity: 0;
+        }
+        .order-now-section p.lead {
+            font-size: 1.3rem;
+            margin-bottom: 40px;
+            animation: fadeInUp 1s var(--bezier-ease) 0.3s forwards;
+            opacity: 0;
+        }
+        .order-now-section .btn-light {
+            background-color: var(--dark-pink); /* Dark pink for button */
+            border-color: var(--dark-pink);
+            color: var(--light-text-color);
+            padding: 18px 50px;
+            font-size: 1.4rem;
+            font-weight: 600;
+            border-radius: 8px;
+            transition: background-color var(--transition-speed) ease, color var(--transition-speed) ease, transform var(--transition-speed) ease;
+            animation: zoomIn 1s var(--bezier-ease) 0.6s forwards;
+            opacity: 0;
+        }
+        .order-now-section .btn-light:hover {
+            background-color: var(--button-hover-pink);
+            border-color: var(--button-hover-pink);
+            color: var(--light-text-color);
+            transform: translateY(-5px);
+        }
+
+        /* About Us Section */
+        .about-us-section {
+            background-color: var(--soft-pink); /* Use soft pink for consistency */
+            padding: 80px 0;
+            text-align: center;
+        }
+        .about-us-section h2 {
+            font-family: var(--heading-font);
+            font-size: 3.2rem;
+            color: var(--primary-text-color);
+            margin-bottom: 40px;
+        }
+        .about-us-section p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 0 auto 30px;
+        }
+        .about-us-section .btn {
+            background-color: var(--dark-pink); /* Dark pink for button */
+            border-color: var(--dark-pink);
+            color: var(--light-text-color);
+            padding: 12px 35px;
+            font-size: 1.1rem;
+            border-radius: 5px;
+            transition: background-color var(--transition-speed) ease, transform var(--transition-speed) ease;
+        }
+        .about-us-section .btn:hover {
+            background-color: var(--button-hover-pink);
+            transform: translateY(-3px);
+        }
+        /* Decorative border for About Us */
+        .about-us-section .decorative-border {
+            border: 3px solid var(--dark-pink); /* Dark pink border */
+            padding: 30px;
+            border-radius: 20px;
+            margin: 0 auto;
+            max-width: 900px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1); /* Soft shadow for depth */
+        }
+
+
+        /* Footer Styling */
+        .footer {
+            background-color: var(--footer-bg-color); /* Changed to soft pink */
+            color: var(--footer-text-color);
+            padding: 40px 0;
+            font-size: 0.9rem;
+        }
+        .footer h5 {
+            color: var(--footer-heading-color); /* Darker pink for footer headings */
+            margin-bottom: 20px;
+            font-family: var(--heading-font);
+        }
+        .footer ul {
+            list-style: none;
+            padding: 0;
+        }
+        .footer ul li {
+            margin-bottom: 10px;
+        }
+        .footer ul li a {
+            color: var(--footer-text-color);
+            text-decoration: none;
+            transition: color var(--transition-speed) ease;
+        }
+        .footer ul li a:hover {
+            color: var(--dark-pink); /* Pink hover for footer links */
+        }
+        .footer .social-icons a {
+            color: var(--footer-text-color); /* Adjusted for readability */
+            font-size: 1.5rem;
+            margin-right: 15px;
+            transition: color var(--transition-speed) ease;
+        }
+        .footer .social-icons a:hover {
+            color: var(--dark-pink); /* Pink hover for social icons */
+        }
+        .footer .form-control {
+            background-color: rgba(255,255,255,0.3); /* Lighter background for input */
+            border: 1px solid rgba(255,255,255,0.4);
+            color: var(--primary-text-color); /* Changed input text color */
+            border-radius: 5px;
+        }
+        .footer .form-control::placeholder {
+            color: rgba(0,0,0,0.5); /* Darker placeholder */
+        }
+        .footer .btn-outline-light {
+            border-color: var(--dark-pink); /* Pink border for subscribe button */
+            color: var(--dark-pink); /* Pink text for subscribe button */
+            transition: background-color var(--transition-speed) ease, border-color var(--transition-speed) ease;
+        }
+        .footer .btn-outline-light:hover {
+            background-color: var(--dark-pink); /* Pink hover for subscribe button */
+            border-color: var(--dark-pink);
+            color: var(--light-text-color);
+        }
+        .footer .bottom-bar {
+            border-top: 1px solid rgba(0,0,0,0.1); /* Darker border for contrast */
+            padding-top: 20px;
+            margin-top: 30px;
+            text-align: center;
+            color: var(--primary-text-color); /* Adjusted for readability */
+        }
+
+        /* Sticky Shop Button */
+        .sticky-shop-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px; /* Position on the right side */
+            background-color: var(--dark-pink); /* Dark pink button */
+            color: var(--light-text-color);
+            padding: 15px 25px;
+            border-radius: 50px; /* Pill shape */
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: background-color var(--transition-speed) ease, transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+            z-index: 1050; /* Higher than navbar, lower than modals */
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Space between icon and text */
+        }
+        .sticky-shop-button:hover {
+            background-color: var(--button-hover-pink); /* Slightly darker pink on hover */
+            transform: translateY(-5px) scale(1.05); /* Lift and slightly enlarge */
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+            color: var(--light-text-color); /* Keep text color white on hover */
+        }
+        .sticky-shop-button i {
+            font-size: 1.4rem;
+        }
+
+        /* Global Animations (used by multiple sections) */
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .navbar-brand {
+                font-size: 2rem;
+            }
+            .hero-content h1 {
+                font-size: 3.5rem;
+            }
+            .hero-content p {
+                font-size: 1.8rem;
+            }
+            .hero-content .btn-primary {
+                padding: 15px 35px;
+                font-size: 1.2rem;
+            }
+            .our-menu-section h2, .order-now-section h2, .about-us-section h2 {
+                font-size: 2.8rem;
+            }
+            .menu-item-row {
+                margin-bottom: 60px;
+            }
+            .menu-item-img img {
+                height: 300px;
+            }
+            .menu-item-text h3 {
+                font-size: 2rem;
+            }
+            .menu-item-text p {
+                font-size: 1rem;
+            }
+            .sticky-shop-button {
+                font-size: 1rem;
+                padding: 12px 20px;
+                bottom: 20px;
+                right: 20px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-brand {
+                font-size: 1.8rem;
+            }
+            .hero-section {
+                min-height: 480px;
+                padding: 100px 15px 80px;
+            }
+            .hero-section .text-ribbon {
+                padding: 20px 0;
+            }
+            .hero-content h1 {
+                font-size: 2.8rem;
+            }
+            .hero-content p {
+                font-size: 1.8rem;
+                margin-bottom: 30px;
+            }
+            .hero-content .btn-primary {
+                padding: 12px 30px;
+                font-size: 1.1rem;
+            }
+            .our-menu-section {
+                padding: 50px 0;
+            }
+            .our-menu-section h2, .order-now-section h2, .about-us-section h2 {
+                font-size: 2.2rem;
+                margin-bottom: 30px;
+            }
+            .menu-item-row .col-md-6:first-child,
+            .menu-item-row .col-md-6:last-child {
+                order: initial !important;
+            }
+            .menu-item-img {
+                margin-bottom: 30px;
+            }
+            .menu-item-img img {
+                height: 250px;
+            }
+            .order-now-section {
+                padding: 60px 15px;
+            }
+            .order-now-section .btn-light {
+                padding: 14px 35px;
+                font-size: 1.1rem;
+            }
+            .about-us-section {
+                padding: 60px 0;
+            }
+            .about-us-section p {
+                font-size: 1rem;
+                margin-bottom: 20px;
+            }
+            .sticky-shop-button {
+                font-size: 0.9rem;
+                padding: 10px 18px;
+                bottom: 15px;
+                right: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-expand-lg">
+        <div class="container">
+            <a class="navbar-brand" href="{{ url_for('home') }}">The Cake Boutique</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav mx-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" aria-current="page" href="{{ url_for('home') }}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#our-menu">Menu</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#about-us">About</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#contact-us">Contact</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav navbar-icons">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-search"></i></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="bi bi-cart"></i></a>
+                    </li>
+                    {% if session.get('customer_id') or session.get('employee_id') %}
+                        <li class="nav-item">
+                            <span class="nav-link">Welcome, {{ session.get('username', 'User') }}</span>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('logout') }}"><i class="bi bi-box-arrow-right"></i> Logout</a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('login') }}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('signup') }}">Sign Up</a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="hero-bg-image"></div>
+        <div class="decorative-shape-1"></div>
+        <div class="decorative-shape-2"></div>
+        <div class="text-ribbon"></div> <div class="container hero-content text-center">
+            <h1>Bake Someone Happy</h1>
+            <p>Daily baked goods just for you</p>
+            <a href="#our-menu" class="btn btn-primary">Discover Our Menu</a>
+        </div>
+    </section>
+
+    <section class="our-menu-section" id="our-menu">
+        <div class="container">
+            <h2>Our Delicious Menu</h2>
+
+            <div class="row menu-item-row hidden">
+                <div class="col-md-6 order-md-1">
+                    <div class="menu-item-img">
+                        <img src="{{ url_for('static', filename='images/classic_cakes.png') }}" alt="Classic Cakes">
+                    </div>
+                </div>
+                <div class="col-md-6 order-md-2">
+                    <div class="menu-item-text">
+                        <h3>Classic Cakes</h3>
+                        <div class="menu-item-line"></div>
+                        <p>Indulge in our timeless collection of classic cakes, crafted with traditional recipes and the finest ingredients. Perfect for any gathering, our classics range from rich chocolate to elegant vanilla, guaranteed to bring joy to every bite.</p>
+                        <a href="#" class="btn">View Classic Cakes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row menu-item-row reverse-order hidden">
+                <div class="col-md-6 order-md-1">
+                    <div class="menu-item-img">
+                        <img src="{{ url_for('static', filename='images/cupcakes.jpeg') }}" alt="Cupcakes">
+                    </div>
+                </div>
+                <div class="col-md-6 order-md-2">
+                    <div class="menu-item-text">
+                        <h3>Delightful Cupcakes</h3>
+                        <div class="menu-item-line"></div>
+                        <p>Our cupcakes are miniature masterpieces, bursting with flavor and adorned with artistic flair. Ideal for individual treats or sharing with loved ones, each cupcake is a small parcel of happiness, baked fresh daily.</p>
+                        <a href="#" class="btn">Explore Cupcakes</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row menu-item-row hidden">
+                <div class="col-md-6 order-md-1">
+                    <div class="menu-item-img">
+                        <img src="{{ url_for('static', filename='images/celebration_cakes.jpeg') }}" alt="Celebration Cakes">
+                    </div>
+                </div>
+                <div class="col-md-6 order-md-2">
+                    <div class="menu-item-text">
+                        <h3>Celebration Cakes</h3>
+                        <div class="menu-item-line"></div>
+                        <p>Make every occasion unforgettable with our exquisite celebration cakes. Designed to your specifications, these showstoppers are perfect for birthdays, weddings, anniversaries, or any moment worth celebrating. Let us create your dream cake!</p>
+                        <a href="#" class="btn">Customize Your Cake</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="order-now-section">
+        <div class="container text-center">
+            <h2>Looking for Something Unique?</h2>
+            <p class="lead mb-4">We create custom cakes for all occasions.</p>
+            <a href="#" class="btn btn-light">Order Custom Cake</a>
+        </div>
+    </section>
+
+    <section class="about-us-section" id="about-us">
+        <div class="container">
+            <h2>About The Cake Boutique</h2>
+            <div class="decorative-border">
+                <p>Welcome to The Cake Boutique, where passion meets perfection in every bake. Established in 2020, our mission has always been to bring smiles to faces through the art of baking. We believe that every cake tells a story, and we are dedicated to crafting delicious, high-quality treats that create lasting memories.</p>
+                <p>Using only the finest, freshest ingredients, our skilled bakers pour their heart into every creation, from classic recipes to innovative custom designs. We are more than just a cake shop; we are a community built on sweetness and joy. Come visit us and experience the magic of The Cake Boutique!</p>
+                <a href="#" class="btn">Learn More About Us</a>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer" id="contact-us">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3 mb-4">
+                    <h5>Shop</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#">All Products</a></li>
+                        <li><a href="#">Classic Cakes</a></li>
+                        <li><a href="#">Cupcakes</a></li>
+                        <li><a href="#">Celebration Cakes</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>About</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#about-us">Our Story</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Contact Us</h5>
+                    <ul class="list-unstyled">
+                        <li>Email: info@thecakeboutique.com</li>
+                        <li>Phone: +1 234 567 890</li>
+                        <li>Address: 123 Bakery Lane, Sweetville</li>
+                    </ul>
+                </div>
+                <div class="col-md-3 mb-4">
+                    <h5>Stay Connected</h5>
+                    <div class="social-icons mb-3">
+                        <a href="#" class="me-2"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="me-2"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="me-2"><i class="bi bi-twitter"></i></a>
+                    </div>
+                    <p>Subscribe to our newsletter for updates:</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Your email" aria-label="Your email">
+                        <button class="btn btn-outline-light" type="button">Subscribe</button>
+                    </div>
+                </div>
+            </div>
+            <div class="bottom-bar">
+                <p>&copy; {{ datetime.datetime.now().year }} The Cake Boutique. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <a href="{{ url_for('shop') }}" class="sticky-shop-button">
+      <i class="bi bi-shop"></i> Shop Now
+          </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for internal links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    document.querySelector(this.getAttribute('href')).scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            });
+
+            // Intersection Observer for menu item animations
+            const menuItems = document.querySelectorAll('.menu-item-row');
+            const sectionsToAnimate = document.querySelectorAll('.our-menu-section h2, .order-now-section h2, .order-now-section p.lead, .order-now-section .btn-light, .about-us-section h2, .about-us-section .decorative-border');
+
+            const observerOptions = {
+                root: null, // observe the viewport
+                rootMargin: '0px',
+                threshold: 0.2 // Trigger when 20% of the item is visible
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        if (entry.target.classList.contains('menu-item-row')) {
+                            entry.target.classList.remove('hidden');
+                            entry.target.classList.add('visible');
+                        } else {
+                            // For other elements, apply specific animations
+                            // These elements already have animations defined with opacity 0 and forwards
+                            // Just ensure they are visible.
+                            // Adding a class 'animate-on-scroll' could be an alternative for these.
+                            entry.target.style.opacity = 1;
+                            entry.target.style.transform = 'translateY(0) scale(1)'; // Reset transform
+                        }
+                        observer.unobserve(entry.target); // Stop observing once it's visible
+                    }
+                });
+            }, observerOptions);
+
+            // Add 'hidden' class initially and observe each menu item
+            menuItems.forEach(item => {
+                item.classList.add('hidden'); // Ensure initial state is hidden
+                observer.observe(item);
+            });
+
+            // Observe other sections' elements for animation
+            sectionsToAnimate.forEach(element => {
+                // Ensure elements that use 'forwards' animation are initially hidden via CSS opacity
+                // and their animations are already set up in CSS, then just observe them.
+                // For a smoother initial state, you might explicitly set these to opacity: 0 and transform: translateY(Xpx)
+                // in the CSS if they are not already animated by default.
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

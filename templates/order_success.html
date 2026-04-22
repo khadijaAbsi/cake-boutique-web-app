@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Order Placed!{% endblock %}
+
+{% block content %}
+<style>
+    .success-container {
+        text-align: center;
+        padding: 50px;
+        background-color: #fff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0,0,0,.1);
+        margin-top: 50px;
+    }
+    .success-container h2 {
+        color: #28a745; /* Green color for success */
+        font-family: 'Playfair Display', serif;
+        margin-bottom: 20px;
+    }
+    .success-container p {
+        font-size: 1.1rem;
+        color: #555;
+    }
+    .success-container .btn {
+        margin-top: 20px;
+    }
+</style>
+
+<div class="container my-5">
+    <div class="success-container">
+        <i class="bi bi-check-circle-fill" style="font-size: 4rem; color: #28a745;"></i>
+        <h2>Order Placed Successfully!</h2>
+        <p class="lead">Thank you for your purchase!</p>
+        <p>Your Order ID is: <strong>#{{ order_id }}</strong></p>
+        <p>You will receive an email confirmation shortly.</p>
+        
+        <a href="{{ url_for('shop') }}" class="btn btn-primary mt-3 me-2">Continue Shopping</a>
+        <a href="{{ url_for('home') }}" class="btn btn-outline-secondary mt-3">Go to Home</a>
+    </div>
+</div>
+{% endblock %}

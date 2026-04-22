@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<style>
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .card-header.bg-primary {
+        background-color: var(--dark-pink) !important;
+        color: var(--light-text-color) !important;
+    }
+    .card-header.bg-warning {
+        background-color: var(--medium-pink) !important; /* Using a lighter pink for low stock */
+        color: var(--primary-text-color) !important;
+    }
+    .badge.bg-danger {
+        background-color: #dc3545 !important; /* Keep red for critical, or change if preferred */
+    }
+    .badge.bg-warning {
+        background-color: #ffc107 !important; /* Keep orange for low, or change if preferred */
+    }
+    .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-primary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+    .btn-warning {
+        background-color: var(--button-hover-pink); /* Adjusted to blend with pink theme */
+        border-color: var(--button-hover-pink);
+        color: var(--light-text-color);
+    }
+    .btn-warning:hover {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+</style>
+<div class="container">
+    <h2 class="my-4">Cake Shop Dashboard</h2>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Recent Orders</h5>
+                </div>
+                <div class="card-body">
+                    {% if not recent_orders %}
+                        <div class="alert alert-info">No recent orders found</div>
+                    {% else %}
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Order ID</th>
+                                        <th>Customer</th>
+                                        <th>Date</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for order in recent_orders %}
+                                    <tr>
+                                        <td>{{ order[0] }}</td>
+                                        <td>{{ order[1] }}</td>
+                                        <td>{{ order[2].strftime('%Y-%m-%d') }}</td>
+                                        <td>
+                                            <span class="badge bg-{{ 
+                                                'success' if order[3] == 'completed' 
+                                                else 'danger' if order[3] == 'cancelled' 
+                                                else 'info' if order[3] == 'processing' 
+                                                else 'warning' 
+                                            }}">
+                                                {{ order[3] }}
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <a href="{{ url_for('manage_orders') }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    {% endif %}
+                    <a href="{{ url_for('manage_orders', status='all') }}" class="btn btn-primary mt-3">
+                        View All Orders
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card shadow">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Low Stock Items</h5>
+                </div>
+                <div class="card-body">
+                    {% if not low_stock %}
+                        <div class="alert alert-success">All inventory levels are good</div>
+                    {% else %}
+                        <ul class="list-group list-group-flush">
+                            {% for item in low_stock %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ item[0] }}</strong>
+                                    <div class="text-muted small">Current: {{ item[1] }}</div>
+                                </div>
+                                <span class="badge bg-{{ 'danger' if item[1] < 5 else 'warning' }}">
+                                    {{ 'Critical' if item[1] < 5 else 'Low' }}
+                                </span>
+                            </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    <a href="{{ url_for('manage_inventory') }}" class="btn btn-warning mt-3">
+                        Manage Inventory
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Cakes{% endblock %}
+
+{% block content %}
+<style>
+    
+    h2 {
+        color: var(--dark-pink);
+        font-family: 'Playfair Display', serif;
+    }
+    .card-header.bg-primary {
+        background-color: var(--dark-pink) !important;
+        color: var(--light-text-color) !important;
+    }
+    .btn-primary {
+        background-color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-primary:hover {
+        background-color: var(--button-hover-pink);
+        border-color: var(--button-hover-pink);
+    }
+    .btn-outline-primary {
+        color: var(--dark-pink);
+        border-color: var(--dark-pink);
+    }
+    .btn-outline-primary:hover {
+        background-color: var(--dark-pink);
+        color: var(--light-text-color);
+    }
+    .btn-outline-danger {
+        color: #dc3545;
+        border-color: #dc3545;
+    }
+    .btn-outline-danger:hover {
+        background-color: #dc3545;
+        color: white;
+    }
+    /* ألوان الشارات للحالة المتوفرة */
+    .badge.bg-success {
+        background-color: #28a745 !important; /* أخضر للمتوفر */
+        color: white !important;
+    }
+    .badge.bg-danger {
+        background-color: #dc3545 !important; /* أحمر لغير المتوفر */
+        color: white !important;
+    }
+</style>
+<h2 class="mb-4">Manage Cakes</h2>
+
+<div class="card">
+    <div class="card-header bg-primary text-white">
+        All Cakes
+    </div>
+    <div class="card-body">
+        {% if not cakes %}
+        <div class="alert alert-warning">
+            No cakes found in the database.
+        </div>
+        {% else %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Stock</th>
+                        <th>Category</th>
+                        <th>Available</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cake in cakes %}
+                    <tr>
+                        <td>{{ cake.cake_id }}</td>
+                        <td>{{ cake.name }}</td>
+                        <td>${{ "%.2f"|format(cake.price) }}</td>
+                        <td>{{ cake.stock }}</td>
+                        <td>{{ cake.category }}</td>
+                        <td>
+                            <span class="badge bg-{{ 'success' if cake.available else 'danger' }}">
+                                {{ 'Available' if cake.available else 'Out of Stock' }}
+                            </span>
+                        </td>
+                        <td>
+                            <a href="{{ url_for('edit_cake', cake_id=cake.cake_id) }}" 
+                               class="btn btn-sm btn-outline-primary">
+                                <i class="bi bi-pencil"></i> Edit
+                            </a>
+                            
+                            <form action="{{ url_for('delete_cake', cake_id=cake.cake_id) }}" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-outline-danger" 
+                                        onclick="return confirm('Are you sure you want to delete {{ cake.name }}?');">
+                                    <i class="bi bi-trash"></i> Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endif %}
+        
+        <a href="{{ url_for('add_cake') }}" class="btn btn-primary mt-3">
+            <i class="bi bi-plus-circle"></i> Add New Cake
+        </a>
+    </div>
+</div>
+{% endblock %}
